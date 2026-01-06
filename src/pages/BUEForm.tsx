@@ -12,16 +12,16 @@ function BUEForm() {
 
                         <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
                             <div className="sm:col-span-9">
-                                <label htmlFor="name" className="block text-sm/6 font-medium text-white">Name</label>
+                                <label htmlFor="name" className="block text-sm/6 font-medium text-white">Name <span className="text-red-500">*</span></label>
                                 <div className="mt-2">
-                                    <input id="name" type="text" name="name" autoComplete="name" className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                                    <input id="name" type="text" name="name" autoComplete="name" required className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
                                 </div>
                             </div>
 
                             <div className="sm:col-span-9">
-                                <label htmlFor="email-address" className="block text-sm/6 font-medium text-white">Email address</label>
+                                <label htmlFor="email-address" className="block text-sm/6 font-medium text-white">Email address <span className="text-red-500">*</span></label>
                                 <div className="mt-2">
-                                    <input id="email-address" type="email" name="email-address" autoComplete="email" className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                                    <input id="email-address" type="email" name="email-address" autoComplete="email" required className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
                                 </div>
                             </div>
 
@@ -33,9 +33,9 @@ function BUEForm() {
                             </div>
 
                             <div className="sm:col-span-3">
-                                <label htmlFor="age" className="block text-sm/6 font-medium text-white">Age</label>
+                                <label htmlFor="age" className="block text-sm/6 font-medium text-white">Age <span className="text-red-500">*</span></label>
                                 <div className="mt-3">
-                                    <input id="age" type="number" name="age" min="1" max="120" className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
+                                    <input id="age" type="number" name="age" min="1" max="120" required className="block w-full rounded-md bg-white/5 px-3 py-1.5 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500 sm:text-sm/6" />
                                 </div>
                             </div>
                         </div>
