@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import EditUserModal from '../components/EditUserModal';
 
 interface User {
     id: number;
@@ -14,6 +15,13 @@ function UsersTable() {
     const [loading, setLoading] = useState(true);
     const [message, setMessage] = useState('');
     const [isSearching, setIsSearching] = useState(false);
+    const [editingUser, setEditingUser] = useState<User | null>(null);
+    const [editFormData, setEditFormData] = useState({
+        updatedName: '',
+        updatedEmail: '',
+        updatedPhone: '',
+        updatedAge: ''
+    });
 
     useEffect(() => {
         fetchUsers();
@@ -92,10 +100,58 @@ function UsersTable() {
         } catch (error) {
             console.error('Search users error:', error);
             let errorMessage = 'Unable to connect to the server.';
+            setMessage(`Error: ${errorMessage}`);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleClearSearch = () => {
+        setSearchQuery('');
+        setIsSearching(false);
+        setMessage('');
+        fetchUsers();
+    };
+
+    const deleteUser = async (email: string) => {
+        if (!window.confirm(`Are you sure you want to delete the user with email: ${email}?`)) {
+            return;
+        }
+
+        setLoading(true);
+        setMessage('');
+
+        try {
+            const response = await fetch(`https://localhost:7009/api/User/delete/${encodeURIComponent(email)}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                mode: 'cors',
+            });
+
+            if (response.status === 204 || response.status === 200) {
+                setMessage(`User with email ${email} deleted successfully!`);
+                // Refresh the table
+                fetchUsers();
+            } else if (response.status === 404) {
+                setMessage('User not found.');
+            } else if (response.status === 500) {
+                const errorData = await response.json().catch(() => null);
+                const errorMessage = errorData?.Message || 'An error occurred on the server.';
+                setMessage(`Server error: ${errorMessage}`);
+            } else {
+                const errorData = await response.json().catch(() => null);
+                const errorMessage = errorData?.Message || `Unexpected error: ${response.status} ${response.statusText}`;
+                setMessage(`Error: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error('Delete user error:', error);
+            let errorMessage = 'Unable to connect to the server.';
 
             if (error instanceof TypeError) {
                 if (error.message.includes('Failed to fetch')) {
-                    errorMessage = 'Connection failed. Make sure the server is running at https://localhost:7009 and CORS is enabled.';
+                    errorMessage = 'Connection failed. Make sure the server is running.';
                 } else if (error.message.includes('CORS')) {
                     errorMessage = 'CORS error: Your backend needs to allow requests from http://localhost:5173.';
                 }
@@ -109,11 +165,80 @@ function UsersTable() {
         }
     };
 
-    const handleClearSearch = () => {
-        setSearchQuery('');
-        setIsSearching(false);
+    const openEditModal = (user: User) => {
+        setEditingUser(user);
+        setEditFormData({
+            updatedName: user.name,
+            updatedEmail: user.email,
+            updatedPhone: user.phone || '',
+            updatedAge: user.age.toString()
+        });
+    };
+
+    const closeEditModal = () => {
+        setEditingUser(null);
+        setEditFormData({
+            updatedName: '',
+            updatedEmail: '',
+            updatedPhone: '',
+            updatedAge: ''
+        });
+    };
+
+    const updateUser = async () => {
+        if (!editingUser) return;
+
+        setLoading(true);
         setMessage('');
-        fetchUsers();
+
+        try {
+            const response = await fetch('https://localhost:7009/api/User/update', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: editingUser.email,
+                    updatedName: editFormData.updatedName || null,
+                    updatedEmail: editFormData.updatedEmail || null,
+                    updatedPhone: editFormData.updatedPhone || null,
+                    updatedAge: editFormData.updatedAge ? parseInt(editFormData.updatedAge) : null
+                }),
+                mode: 'cors',
+            });
+
+            if (response.status === 204 || response.status === 200) {
+                setMessage('User updated successfully!');
+                closeEditModal();
+                fetchUsers();
+            } else if (response.status === 404) {
+                setMessage('User not found.');
+            } else if (response.status === 400) {
+                const errorData = await response.json().catch(() => null);
+                if (errorData?.errors) {
+                    const errorMessages = Object.entries(errorData.errors)
+                        .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`)
+                        .join('\n');
+                    setMessage(`Validation errors:\n${errorMessages}`);
+                } else {
+                    setMessage(`Validation error: ${errorData?.Message || 'Invalid data'}`);
+                }
+            } else if (response.status === 500) {
+                const errorData = await response.json().catch(() => null);
+                const errorMessage = errorData?.Message || 'An error occurred on the server.';
+                setMessage(`Server error: ${errorMessage}`);
+            } else {
+                const errorData = await response.json().catch(() => null);
+                const errorMessage = errorData?.Message || `Unexpected error: ${response.status} ${response.statusText}`;
+                setMessage(`Error: ${errorMessage}`);
+            }
+        } catch (error) {
+            console.error('Update user error:', error);
+            let errorMessage = 'Unable to connect to the server.';
+            setMessage(`Error: ${errorMessage}`);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -185,6 +310,7 @@ function UsersTable() {
                                         <th className="text-left px-6 py-4 text-base font-semibold text-white">Email</th>
                                         <th className="text-left px-6 py-4 text-base font-semibold text-white">Phone</th>
                                         <th className="text-left px-6 py-4 text-base font-semibold text-white">Age</th>
+                                        <th className="text-left px-6 py-4 text-base font-semibold text-white">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -195,6 +321,23 @@ function UsersTable() {
                                             <td className="px-6 py-4 text-base text-gray-300">{user.email}</td>
                                             <td className="px-6 py-4 text-base text-gray-300">{user.phone || '-'}</td>
                                             <td className="px-6 py-4 text-base text-gray-300">{user.age}</td>
+                                            <td className="px-6 py-4 text-base flex gap-x-2">
+                                                <button
+                                                    onClick={() => openEditModal(user)}
+                                                    disabled={loading}
+                                                    className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+
+                                                >
+                                                    Edit
+                                                </button>
+                                                <button
+                                                    onClick={() => deleteUser(user.email)}
+                                                    disabled={loading}
+                                                    className="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                >
+                                                    Delete
+                                                </button>
+                                            </td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -203,6 +346,17 @@ function UsersTable() {
                     )}
                 </div>
             </div>
+
+            <EditUserModal
+                isOpen={!!editingUser}
+                editingUser={editingUser}
+                editFormData={editFormData}
+                setEditFormData={setEditFormData}
+                loading={loading}
+                message={message}
+                onClose={closeEditModal}
+                onSubmit={updateUser}
+            />
         </>
     )
 }
