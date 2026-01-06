@@ -1,5 +1,5 @@
 import './App.css'
-import BUEForm from './BUEForm'
+import BUEForm from './pages/BUEForm'
 
 function App() {
 

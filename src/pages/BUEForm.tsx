@@ -1,10 +1,9 @@
-import './App.css'
 
 function BUEForm() {
 
     return (
         <>
-        
+
             <form>
                 <div className="space-y-12">
                     <div className="border-b border-white/10 pb-12">
