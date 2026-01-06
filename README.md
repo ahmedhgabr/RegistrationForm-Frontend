@@ -1,23 +1,24 @@
 # BUE Registration System
 
-A modern user registration and management system built with React, TypeScript, and Vite. This application provides a complete CRUD interface for managing user registrations with a clean sidebar navigation.
+A modern user registration and management system built with React and TypeScript. This application provides a complete CRUD interface for managing user registrations with a clean sidebar navigation.
 
 ## Requirements
 
 Before running this application, ensure you have the following installed:
-
-```
+- **Node.js** (v18 or higher)
+- **npm** (v9 or higher) or **yarn**
+- **Backend API** running at `https://localhost:7009` 
 
 ## Installation
 
 1. Clone the repository:
-```bash
+```
 git clone <repository-url>
 cd RegistrationForm
 ```
 
 2. Install dependencies:
-```bash
+```
 npm install
 ```
 
@@ -26,7 +27,7 @@ npm install
 1. Make sure your backend API is running at `https://localhost:7009`
 
 2. Start the development server:
-```bash
+```
 npm run dev
 ```
 
@@ -44,4 +45,4 @@ http://localhost:5173/
 
 
 ## Connection Failed
-- Verify (backend)[https://github.com/ahmedhgabr/RegistrationForm-Backend] is running and accessible https://localhost:7009/
+- Verify [backend](https://github.com/ahmedhgabr/RegistrationForm-Backend) is running and accessible https://localhost:7009/
