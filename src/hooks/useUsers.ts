@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { userService, type User, type UpdateUserData } from '../services/userService';
+import { mapApiError } from '../utils/mapApiError';
 
 interface EditFormData {
     updatedName: string;
@@ -26,31 +27,6 @@ export const useUsers = () => {
         fetchUsers();
     }, []);
 
-    const handleError = (error: any) => {
-        console.error('API Error:', error);
-
-        if (error.status) {
-            // Structured error from our service
-            switch (error.status) {
-                case 404:
-                    return 'User not found.';
-                case 400:
-                    if (error.data?.errors) {
-                        const errorMessages = Object.entries(error.data.errors)
-                            .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`)
-                            .join('\n');
-                        return `Validation errors:\n${errorMessages}`;
-                    }
-                    return `Validation error: ${error.message}`;
-                case 500:
-                    return `Server error: ${error.message}`;
-                default:
-                    return `Error: ${error.message}`;
-            }
-        }
-        return error?.message || 'Unable to connect to the server.';
-    };
-
     const fetchUsers = async () => {
         setLoading(true);
         setMessage('');
@@ -60,7 +36,7 @@ export const useUsers = () => {
             setUsers(data);
             setIsSearching(false);
         } catch (error) {
-            setMessage(`Error: ${handleError(error)}`);
+            setMessage(`Error: ${mapApiError(error)}`);
         } finally {
             setLoading(false);
         }
@@ -84,7 +60,7 @@ export const useUsers = () => {
                 setMessage('No users found with that email.');
                 setUsers([]);
             } else {
-                setMessage(`Error: ${handleError(error)}`);
+                setMessage(`Error: ${mapApiError(error)}`);
                 setUsers([]);
             }
         } finally {
@@ -112,7 +88,7 @@ export const useUsers = () => {
             setMessage(`User with email ${email} deleted successfully!`);
             fetchUsers();
         } catch (error) {
-            setMessage(`Error: ${handleError(error)}`);
+            setMessage(`Error: ${mapApiError(error)}`);
         } finally {
             setLoading(false);
         }
@@ -158,7 +134,7 @@ export const useUsers = () => {
             closeEditModal();
             fetchUsers();
         } catch (error) {
-            setMessage(`Error: ${handleError(error)}`);
+            setMessage(`Error: ${mapApiError(error)}`);
         } finally {
             setLoading(false);
         }
