@@ -16,3 +16,13 @@
 .card {
   padding: 2em;
 }
+
+/* Tailwind component shortcuts */
+.th-cell { @apply text-left px-6 py-4 text-base font-semibold text-white; }
+.td-cell { @apply px-6 py-4 text-base text-gray-300; }
+.td-actions { @apply px-6 py-4 text-base flex gap-x-2; }
+
+.btn-base { @apply rounded-md px-4 py-2 text-sm font-semibold text-white disabled:opacity-50 disabled:cursor-not-allowed; }
+.btn-primary { @apply bg-indigo-500 hover:bg-indigo-600 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500; }
+.btn-gray { @apply bg-gray-700 hover:bg-gray-600; }
+.btn-edit { @apply bg-indigo-500 hover:bg-gray-600; }

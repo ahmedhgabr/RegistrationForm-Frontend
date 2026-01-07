@@ -33,7 +33,7 @@ function UsersTable() {
                         <button
                             onClick={fetchUsers}
                             disabled={loading}
-                            className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-600"
+                            className="btn-base btn-primary"
                         >
                             {loading ? 'Loading...' : 'Refresh'}
                         </button>
@@ -51,7 +51,7 @@ function UsersTable() {
                         <button
                             onClick={searchUserByEmail}
                             disabled={loading}
-                            className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-600"
+                            className="btn-base btn-primary"
                         >
                             Search
                         </button>
@@ -59,7 +59,7 @@ function UsersTable() {
                             <button
                                 onClick={handleClearSearch}
                                 disabled={loading}
-                                className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-indigo-600"
+                                className="btn-base btn-primary"
                             >
                                 Clear
                             </button>
@@ -85,35 +85,34 @@ function UsersTable() {
                             <table className="w-full border-collapse">
                                 <thead>
                                     <tr className="border-b border-white/10">
-                                        <th className="text-left px-6 py-4 text-base font-semibold text-white">ID</th>
-                                        <th className="text-left px-6 py-4 text-base font-semibold text-white">Name</th>
-                                        <th className="text-left px-6 py-4 text-base font-semibold text-white">Email</th>
-                                        <th className="text-left px-6 py-4 text-base font-semibold text-white">Phone</th>
-                                        <th className="text-left px-6 py-4 text-base font-semibold text-white">Age</th>
-                                        <th className="text-left px-6 py-4 text-base font-semibold text-white">Action</th>
+                                        <th className="th-cell">ID</th>
+                                        <th className="th-cell">Name</th>
+                                        <th className="th-cell">Email</th>
+                                        <th className="th-cell">Phone</th>
+                                        <th className="th-cell">Age</th>
+                                        <th className="th-cell">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {users.map((user) => (
                                         <tr key={user.id} className="border-b border-white/10 hover:bg-white/5 transition">
-                                            <td className="px-6 py-4 text-base text-gray-300">{user.id}</td>
-                                            <td className="px-6 py-4 text-base text-gray-300">{user.name}</td>
-                                            <td className="px-6 py-4 text-base text-gray-300">{user.email}</td>
-                                            <td className="px-6 py-4 text-base text-gray-300">{user.phone || '-'}</td>
-                                            <td className="px-6 py-4 text-base text-gray-300">{user.age}</td>
-                                            <td className="px-6 py-4 text-base flex gap-x-2">
+                                            <td className="td-cell">{user.id}</td>
+                                            <td className="td-cell">{user.name}</td>
+                                            <td className="td-cell">{user.email}</td>
+                                            <td className="td-cell">{user.phone || '-'}</td>
+                                            <td className="td-cell">{user.age}</td>
+                                            <td className="td-actions">
                                                 <button
                                                     onClick={() => openEditModal(user)}
                                                     disabled={loading}
-                                                    className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-
+                                                    className="btn-base btn-edit"
                                                 >
                                                     Edit
                                                 </button>
                                                 <button
                                                     onClick={() => deleteUser(user.id, user.email)}
                                                     disabled={loading}
-                                                    className="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                                                    className="btn-base btn-gray"
                                                 >
                                                     Delete
                                                 </button>
