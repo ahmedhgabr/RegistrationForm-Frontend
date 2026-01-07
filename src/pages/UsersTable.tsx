@@ -113,7 +113,7 @@ function UsersTable() {
         fetchUsers();
     };
 
-    const deleteUser = async (email: string) => {
+    const deleteUser = async (id : number, email: string) => {
         if (!window.confirm(`Are you sure you want to delete the user with email: ${email}?`)) {
             return;
         }
@@ -122,7 +122,7 @@ function UsersTable() {
         setMessage('');
 
         try {
-            const response = await fetch(`https://localhost:7009/api/User/delete/${encodeURIComponent(email)}`, {
+            const response = await fetch(`https://localhost:7009/api/User/delete/${encodeURIComponent(id)}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json'
@@ -198,7 +198,7 @@ function UsersTable() {
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({
-                    email: editingUser.email,
+                    id: editingUser.id,
                     updatedName: editFormData.updatedName || null,
                     updatedEmail: editFormData.updatedEmail || null,
                     updatedPhone: editFormData.updatedPhone || null,
@@ -331,7 +331,7 @@ function UsersTable() {
                                                     Edit
                                                 </button>
                                                 <button
-                                                    onClick={() => deleteUser(user.email)}
+                                                    onClick={() => deleteUser(user.id, user.email)}
                                                     disabled={loading}
                                                     className="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                                                 >
