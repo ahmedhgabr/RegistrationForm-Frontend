@@ -1,21 +1,36 @@
 import { useState } from 'react';
+import { userService, type RegisterUserData } from '../services/userService';
 
 function BUEForm() {
-    const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        phone: '',
-        age: ''
-    });
+    const [formData, setFormData] = useState({ name: '', email: '', phone: '', age: '' });
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState('');
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
+        setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const mapError = (error: any) => {
+        if (error?.status) {
+            switch (error.status) {
+                case 400:
+                    if (error.data?.errors) {
+                        const msg = Object.entries(error.data.errors)
+                            .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`)
+                            .join('\n');
+                        return `Validation errors:\n${msg}`;
+                    }
+                    return `Validation error: ${error.message}`;
+                case 409:
+                    return `Error: ${error.message || 'User already exists.'}`;
+                case 500:
+                    return `Server error: ${error.message}`;
+                default:
+                    return `Error: ${error.message}`;
+            }
+        }
+        return error?.message || 'Unable to connect to the server.';
     };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,57 +39,18 @@ function BUEForm() {
         setMessage('');
 
         try {
-            const response = await fetch('https://localhost:7009/api/User/register', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    name: formData.name,
-                    email: formData.email,
-                    phone: formData.phone || null,
-                    age: formData.age ? parseInt(formData.age) : 0
-                }),
-                mode: 'cors',
-            });
+            const payload: RegisterUserData = {
+                name: formData.name,
+                email: formData.email,
+                phone: formData.phone || null,
+                age: formData.age ? parseInt(formData.age) : 0,
+            };
 
-            if (response.status === 204) {
-                // NoContent - Success
-                setMessage('Registration successful!');
-                setFormData({
-                    name: '',
-                    email: '',
-                    phone: '',
-                    age: ''
-                });
-            } else if (response.status === 400) {
-                // BadRequest - Validation error
-                const errorData = await response.json().catch(() => null);
-                const errorMessages = Object.entries(errorData.errors)
-                    .map(([field, messages]) => `${field}: ${(messages as string[]).join(', ')}`)
-                    .join('\n');
-                setMessage(`Validation errors:\n${errorMessages}`);
-
-            } else if (response.status === 409) {
-                // Conflict - User already exists or business logic error
-                const errorData = await response.json().catch(() => null);
-                const errorMessage = errorData.message || 'User already exists.';
-                setMessage(`Error: ${errorMessage}`);
-            } else if (response.status === 500) {
-                // Internal Server Error
-                const errorData = await response.json().catch(() => null);
-                const errorMessage = errorData.message || 'An error occurred on the server.';
-                setMessage(`Server error: ${errorMessage}`);
-            } else {
-                // Other status codes
-                const errorData = await response.json().catch(() => null);
-                const errorMessage = errorData.message || `Unexpected error: ${response.status} ${response.statusText}`;
-                setMessage(`Error: ${errorMessage}`);
-            }
-        } catch (error) {
-            console.error('Registration error:', error);
-            let errorMessage = 'Unable to connect to the server.';
-            setMessage(`Error: ${errorMessage}`);
+            await userService.registerUser(payload);
+            setMessage('Registration successful!');
+            setFormData({ name: '', email: '', phone: '', age: '' });
+        } catch (err) {
+            setMessage(mapError(err));
         } finally {
             setLoading(false);
         }

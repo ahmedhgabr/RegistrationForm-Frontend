@@ -16,6 +16,13 @@ export interface UpdateUserData {
     updatedAge: number | null;
 }
 
+export interface RegisterUserData {
+    name: string;
+    email: string;
+    phone: string | null;
+    age: number;
+}
+
 class UserService {
     private async handleResponse<T>(response: Response): Promise<T> {
         if (response.status === 204) {
@@ -84,6 +91,19 @@ class UserService {
     async updateUser(userData: UpdateUserData): Promise<void> {
         const response = await fetch(`${API_BASE_URL}/update`, {
             method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData),
+            mode: 'cors',
+        });
+
+        return this.handleResponse<void>(response);
+    }
+
+    async registerUser(userData: RegisterUserData): Promise<void> {
+        const response = await fetch(`${API_BASE_URL}/register`, {
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
