@@ -1,7 +1,9 @@
 import EditUserModal from '../components/EditUserModal';
 import { useUsers } from '../hooks/useUsers';
+import { useLanguage } from '../contexts/LanguageContext';
 
 function UsersTable() {
+    const { t } = useLanguage();
     const {
         users,
         searchQuery,
@@ -27,22 +29,22 @@ function UsersTable() {
                 <div className="border-b border-white/10 pb-12">
                     <div className="flex justify-between items-center">
                         <div>
-                            <h2 className="text-base/7 font-semibold text-white">Users List</h2>
-                            <p className="mt-1 text-sm/6 text-gray-400">{isSearching ? 'Search results' : 'Displaying all registered users.'}</p>
+                            <h2 className="text-base/7 font-semibold text-white">{t('usersTable')}</h2>
+                            <p className="mt-1 text-sm/6 text-gray-400">{isSearching ? t('searchResults') : t('displayingAllUsers')}</p>
                         </div>
                         <button
                             onClick={fetchUsers}
                             disabled={loading}
                             className="btn-base btn-primary"
                         >
-                            {loading ? 'Loading...' : 'Refresh'}
+                            {loading ? t('loading') : t('refresh')}
                         </button>
                     </div>
 
                     <div className="mt-6 flex gap-x-3">
                         <input
                             type="email"
-                            placeholder="Search by email..."
+                            placeholder={t('searchByEmail')}
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyPress={(e) => e.key === 'Enter' && searchUserByEmail()}
@@ -53,7 +55,7 @@ function UsersTable() {
                             disabled={loading}
                             className="btn-base btn-primary"
                         >
-                            Search
+                            {t('search')}
                         </button>
                         {isSearching && (
                             <button
@@ -61,7 +63,7 @@ function UsersTable() {
                                 disabled={loading}
                                 className="btn-base btn-primary"
                             >
-                                Clear
+                                {t('clear')}
                             </button>
                         )}
                     </div>
@@ -74,11 +76,11 @@ function UsersTable() {
 
                     {loading ? (
                         <div className="mt-10 text-center text-gray-400">
-                            <p>Loading users...</p>
+                            <p>{t('loadingUsers')}</p>
                         </div>
                     ) : users.length === 0 ? (
                         <div className="mt-10 text-center text-gray-400">
-                            <p>No users found.</p>
+                            <p>{t('noUsers')}</p>
                         </div>
                     ) : (
                         <div className="mt-8 overflow-x-auto">
@@ -86,11 +88,11 @@ function UsersTable() {
                                 <thead>
                                     <tr className="border-b border-white/10">
                                         <th className="th-cell">ID</th>
-                                        <th className="th-cell">Name</th>
-                                        <th className="th-cell">Email</th>
-                                        <th className="th-cell">Phone</th>
-                                        <th className="th-cell">Age</th>
-                                        <th className="th-cell">Action</th>
+                                        <th className="th-cell">{t('name')}</th>
+                                        <th className="th-cell">{t('emailAddress')}</th>
+                                        <th className="th-cell">{t('phoneNumber')}</th>
+                                        <th className="th-cell">{t('age')}</th>
+                                        <th className="th-cell">{t('actions')}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -107,14 +109,14 @@ function UsersTable() {
                                                     disabled={loading}
                                                     className="btn-base btn-edit"
                                                 >
-                                                    Edit
+                                                    {t('edit')}
                                                 </button>
                                                 <button
                                                     onClick={() => deleteUser(user.id, user.email)}
                                                     disabled={loading}
                                                     className="btn-base btn-gray"
                                                 >
-                                                    Delete
+                                                    {t('delete')}
                                                 </button>
                                             </td>
                                         </tr>

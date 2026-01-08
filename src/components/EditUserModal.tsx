@@ -1,4 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react';
+import { useLanguage } from '../contexts/LanguageContext';
+
 type EditableUser = {
     id: number;
     name: string;
@@ -35,12 +37,13 @@ function EditUserModal({
     onClose,
     onSubmit,
 }: EditUserModalProps) {
+    const { t } = useLanguage();
     if (!isOpen || !editingUser) return null;
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
             <div className="bg-gray-900 rounded-lg p-8 max-w-md w-full mx-4 border border-white/10">
-                <h2 className="text-xl font-semibold text-white mb-6">Edit User</h2>
+                <h2 className="text-xl font-semibold text-white mb-6">{t('editUser')}</h2>
 
                 {message && (
                     <div className={`mb-4 p-3 rounded-md text-sm overflow-hidden ${message.includes('successfully') ? 'bg-green-900 text-green-200' : 'bg-red-900 text-red-200'}`}>
@@ -51,7 +54,7 @@ function EditUserModal({
                 <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>
                     <div className="space-y-4">
                         <div>
-                            <label htmlFor="edit-name" className="block text-sm font-medium text-white mb-2">Name <span className="text-red-500">*</span></label>
+                            <label htmlFor="edit-name" className="block text-sm font-medium text-white mb-2">{t('name')} <span className="text-red-500">*</span></label>
                             <input
                                 id="edit-name"
                                 type="text"
@@ -63,7 +66,7 @@ function EditUserModal({
                         </div>
 
                         <div>
-                            <label htmlFor="edit-email" className="block text-sm font-medium text-white mb-2">Email <span className="text-red-500">*</span></label>
+                            <label htmlFor="edit-email" className="block text-sm font-medium text-white mb-2">{t('emailAddress')} <span className="text-red-500">*</span></label>
                             <input
                                 id="edit-email"
                                 type="email"
@@ -75,7 +78,7 @@ function EditUserModal({
                         </div>
 
                         <div>
-                            <label htmlFor="edit-phone" className="block text-sm font-medium text-white mb-2">Phone</label>
+                            <label htmlFor="edit-phone" className="block text-sm font-medium text-white mb-2">{t('phoneNumber')}</label>
                             <input
                                 id="edit-phone"
                                 type="tel"
@@ -86,7 +89,7 @@ function EditUserModal({
                         </div>
 
                         <div>
-                            <label htmlFor="edit-age" className="block text-sm font-medium text-white mb-2">Age <span className="text-red-500">*</span></label>
+                            <label htmlFor="edit-age" className="block text-sm font-medium text-white mb-2">{t('age')} <span className="text-red-500">*</span></label>
                             <input
                                 id="edit-age"
                                 type="number"
@@ -107,14 +110,14 @@ function EditUserModal({
                             disabled={loading}
                             className="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Cancel
+                            {t('cancel')}
                         </button>
                         <button
                             type="submit"
                             disabled={loading}
                             className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            {loading ? 'Updating...' : 'Update'}
+                            {loading ? t('updating') : t('update')}
                         </button>
                     </div>
                 </form>
