@@ -124,7 +124,7 @@ export const useUsers = () => {
                 id: editingUser.id,
                 updatedName: editFormData.updatedName || null,
                 updatedEmail: editFormData.updatedEmail || null,
-                updatedPhone: editFormData.updatedPhone || null,
+                updatedPhone: editFormData.updatedPhone,
                 updatedAge: editFormData.updatedAge ? parseInt(editFormData.updatedAge) : null
             };
 
