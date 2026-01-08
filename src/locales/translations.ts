@@ -52,7 +52,6 @@ export const translations = {
     serverError: 'We\'re having trouble on our side. Please try again later.',
     errorOccurred: 'Something went wrong. Please try again.',
     cantReachServer: 'Can\'t reach the server. Check your internet or ensure the backend is running.',
-    corsError: 'Connection blocked (CORS). Please allow http://localhost:5173 on the server.',
     couldNotComplete: 'We couldn\'t complete your request. Please try again.',
 
     // Delete confirmation
@@ -111,11 +110,10 @@ export const translations = {
     serverError: 'نواجه مشكلة من جانبنا. يرجى محاولة لاحقًا.',
     errorOccurred: 'حدث خطأ ما. يرجى المحاولة مرة أخرى.',
     cantReachServer: 'لا يمكن الوصول إلى الخادم. تحقق من اتصالك بالإنترنت أو تأكد من تشغيل الخادم الخلفي.',
-    corsError: 'تم حظر الاتصال (CORS). يرجى السماح بـ http://localhost:5173 على الخادم.',
     couldNotComplete: 'لم نتمكن من إكمال طلبك. يرجى المحاولة مرة أخرى.',
 
     // Delete confirmation
-    confirmDelete: 'هل أنت متأكد من رغبتك في حذف المستخدم برسالة البريد الإلكتروني: {email}؟',
+    confirmDelete: 'هل أنت متأكد من رغبتك في حذف مستخدم البريد الإلكتروني: {email}؟',
   }
 };
 

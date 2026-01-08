@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { userService, type User, type UpdateUserData } from '../services/userService';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface EditFormData {
     updatedName: string;
@@ -9,6 +10,7 @@ interface EditFormData {
 }
 
 export const useUsers = () => {
+    const { t } = useLanguage();
     const [users, setUsers] = useState<User[]>([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [loading, setLoading] = useState(true);
@@ -75,7 +77,7 @@ export const useUsers = () => {
     };
 
     const deleteUser = async (id: number, email: string) => {
-        if (!window.confirm(`Are you sure you want to delete the user with email: ${email}?`)) {
+        if (!window.confirm(t('confirmDelete', { email }))) {
             return;
         }
 
@@ -84,8 +86,8 @@ export const useUsers = () => {
 
         try {
             await userService.deleteUser(id);
-            setMessage(`User with email ${email} deleted successfully!`);
             fetchUsers();
+            setMessage(t('userDeletedSuccessfully', { email }));
         } catch (error) {
             setMessage(`${handleError(error)}`);
         } finally {
@@ -129,7 +131,7 @@ export const useUsers = () => {
             };
 
             await userService.updateUser(userData);
-            setMessage('User updated successfully!');
+            setMessage(t('userUpdatedSuccessfully'));
             closeEditModal();
             fetchUsers();
         } catch (error) {
