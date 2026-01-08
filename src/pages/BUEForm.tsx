@@ -86,7 +86,7 @@ function BUEForm() {
                 </div>
 
                 <div className="mt-6 flex items-center justify-end gap-x-6">
-                    <button type="button" className="text-sm/6 font-semibold text-white">Cancel</button>
+                    <button type="button" onClick={() => setFormData({ name: '', email: '', phone: '', age: '' })} className="text-sm/6 font-semibold text-white">Clear</button>
                     <button type="submit" disabled={loading} className="btn-base btn-primary btn-sm">{loading ? 'Saving...' : 'Save'}</button>
                 </div>
             </form>
