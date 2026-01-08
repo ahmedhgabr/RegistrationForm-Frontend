@@ -48,70 +48,76 @@ function EditUserModal({
                     </div>
                 )}
 
-                <div className="space-y-4">
-                    <div>
-                        <label htmlFor="edit-name" className="block text-sm font-medium text-white mb-2">Name</label>
-                        <input
-                            id="edit-name"
-                            type="text"
-                            value={editFormData.updatedName}
-                            onChange={(e) => setEditFormData(prev => ({ ...prev, updatedName: e.target.value }))}
-                            className="w-full rounded-md bg-white/5 px-3 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500"
-                        />
+                <form onSubmit={(e) => { e.preventDefault(); onSubmit(); }}>
+                    <div className="space-y-4">
+                        <div>
+                            <label htmlFor="edit-name" className="block text-sm font-medium text-white mb-2">Name <span className="text-red-500">*</span></label>
+                            <input
+                                id="edit-name"
+                                type="text"
+                                value={editFormData.updatedName}
+                                onChange={(e) => setEditFormData(prev => ({ ...prev, updatedName: e.target.value }))}
+                                required
+                                className="w-full rounded-md bg-white/5 px-3 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="edit-email" className="block text-sm font-medium text-white mb-2">Email <span className="text-red-500">*</span></label>
+                            <input
+                                id="edit-email"
+                                type="email"
+                                value={editFormData.updatedEmail}
+                                onChange={(e) => setEditFormData(prev => ({ ...prev, updatedEmail: e.target.value }))}
+                                required
+                                className="w-full rounded-md bg-white/5 px-3 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="edit-phone" className="block text-sm font-medium text-white mb-2">Phone</label>
+                            <input
+                                id="edit-phone"
+                                type="tel"
+                                value={editFormData.updatedPhone}
+                                onChange={(e) => setEditFormData(prev => ({ ...prev, updatedPhone: e.target.value }))}
+                                className="w-full rounded-md bg-white/5 px-3 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500"
+                            />
+                        </div>
+
+                        <div>
+                            <label htmlFor="edit-age" className="block text-sm font-medium text-white mb-2">Age <span className="text-red-500">*</span></label>
+                            <input
+                                id="edit-age"
+                                type="number"
+                                value={editFormData.updatedAge}
+                                onChange={(e) => setEditFormData(prev => ({ ...prev, updatedAge: e.target.value }))}
+                                min="1"
+                                max="120"
+                                required
+                                className="w-full rounded-md bg-white/5 px-3 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500"
+                            />
+                        </div>
                     </div>
 
-                    <div>
-                        <label htmlFor="edit-email" className="block text-sm font-medium text-white mb-2">Email</label>
-                        <input
-                            id="edit-email"
-                            type="email"
-                            value={editFormData.updatedEmail}
-                            onChange={(e) => setEditFormData(prev => ({ ...prev, updatedEmail: e.target.value }))}
-                            className="w-full rounded-md bg-white/5 px-3 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500"
-                        />
+                    <div className="mt-6 flex gap-x-3 justify-end">
+                        <button
+                            type="button"
+                            onClick={onClose}
+                            disabled={loading}
+                            className="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            type="submit"
+                            disabled={loading}
+                            className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                            {loading ? 'Updating...' : 'Update'}
+                        </button>
                     </div>
-
-                    <div>
-                        <label htmlFor="edit-phone" className="block text-sm font-medium text-white mb-2">Phone</label>
-                        <input
-                            id="edit-phone"
-                            type="tel"
-                            value={editFormData.updatedPhone}
-                            onChange={(e) => setEditFormData(prev => ({ ...prev, updatedPhone: e.target.value }))}
-                            className="w-full rounded-md bg-white/5 px-3 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500"
-                        />
-                    </div>
-
-                    <div>
-                        <label htmlFor="edit-age" className="block text-sm font-medium text-white mb-2">Age</label>
-                        <input
-                            id="edit-age"
-                            type="number"
-                            value={editFormData.updatedAge}
-                            onChange={(e) => setEditFormData(prev => ({ ...prev, updatedAge: e.target.value }))}
-                            min="1"
-                            max="120"
-                            className="w-full rounded-md bg-white/5 px-3 py-2 text-base text-white outline-1 -outline-offset-1 outline-white/10 placeholder:text-gray-500 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-500"
-                        />
-                    </div>
-                </div>
-
-                <div className="mt-6 flex gap-x-3 justify-end">
-                    <button
-                        onClick={onClose}
-                        disabled={loading}
-                        className="rounded-md bg-gray-700 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        onClick={onSubmit}
-                        disabled={loading}
-                        className="rounded-md bg-indigo-500 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
-                        {loading ? 'Updating...' : 'Update'}
-                    </button>
-                </div>
+                </form>
             </div>
         </div>
     );
