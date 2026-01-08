@@ -12,24 +12,6 @@ function BUEForm() {
     };
 
     const mapError = (error: any) => {
-        if (error?.status) {
-            switch (error.status) {
-                case 400:
-                    if (error.data?.errors) {
-                        const msg = Object.entries(error.data.errors)
-                            .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`)
-                            .join('\n');
-                        return `Validation errors:\n${msg}`;
-                    }
-                    return `Validation error: ${error.message}`;
-                case 409:
-                    return `Error: ${error.message || 'User already exists.'}`;
-                case 500:
-                    return `Server error: ${error.message}`;
-                default:
-                    return `Error: ${error.message}`;
-            }
-        }
         return error?.message || 'Unable to connect to the server.';
     };
 

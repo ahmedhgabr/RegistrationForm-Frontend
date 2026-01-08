@@ -28,26 +28,6 @@ export const useUsers = () => {
 
     const handleError = (error: any) => {
         console.error('API Error:', error);
-
-        if (error.status) {
-            // Structured error from our service
-            switch (error.status) {
-                case 404:
-                    return 'User not found.';
-                case 400:
-                    if (error.data?.errors) {
-                        const errorMessages = Object.entries(error.data.errors)
-                            .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`)
-                            .join('\n');
-                        return `Validation errors:\n${errorMessages}`;
-                    }
-                    return `Validation error: ${error.message}`;
-                case 500:
-                    return `Server error: ${error.message}`;
-                default:
-                    return `Error: ${error.message}`;
-            }
-        }
         return error?.message || 'Unable to connect to the server.';
     };
 
@@ -60,7 +40,7 @@ export const useUsers = () => {
             setUsers(data);
             setIsSearching(false);
         } catch (error) {
-            setMessage(`Error: ${handleError(error)}`);
+            setMessage(`${handleError(error)}`);
         } finally {
             setLoading(false);
         }
@@ -80,13 +60,8 @@ export const useUsers = () => {
             const data = await userService.searchUserByEmail(searchQuery);
             setUsers(data);
         } catch (error: any) {
-            if (error.status === 404) {
-                setMessage('No users found with that email.');
+                setMessage(`${handleError(error)}`);
                 setUsers([]);
-            } else {
-                setMessage(`Error: ${handleError(error)}`);
-                setUsers([]);
-            }
         } finally {
             setLoading(false);
         }
@@ -112,7 +87,7 @@ export const useUsers = () => {
             setMessage(`User with email ${email} deleted successfully!`);
             fetchUsers();
         } catch (error) {
-            setMessage(`Error: ${handleError(error)}`);
+            setMessage(`${handleError(error)}`);
         } finally {
             setLoading(false);
         }
@@ -158,7 +133,7 @@ export const useUsers = () => {
             closeEditModal();
             fetchUsers();
         } catch (error) {
-            setMessage(`Error: ${handleError(error)}`);
+            setMessage(`${handleError(error)}`);
         } finally {
             setLoading(false);
         }

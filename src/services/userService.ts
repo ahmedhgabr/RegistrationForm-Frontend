@@ -42,14 +42,34 @@ class UserService {
             errorData = await response.json().catch(() => null);
         }
 
-        const errorMessage = errorData?.message || errorData?.Message || 
-                           `HTTP Error: ${response.status} ${response.statusText}`;
+        const errorMessage = this.mapErrorMessage(response.status, errorData);
 
         throw {
             status: response.status,
             message: errorMessage,
             data: errorData
         };
+    }
+
+    private mapErrorMessage(status: number, data: any): string {
+        switch (status) {
+            case 400:
+                if (data?.errors) {
+                    const errorMessages = Object.entries(data.errors)
+                        .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`)
+                        .join('\n');
+                    return `Validation errors:\n${errorMessages}`;
+                }
+                return `Validation error: ${JSON.stringify(data)}  ${data?.message || 'Invalid request'}`;
+            case 404:
+                return  data?.message || 'User not found.';
+            case 409:
+                return data?.message || 'This record already exists.';
+            case 500:
+                return `Server error: ${data?.message || 'An error occurred on the server.'}`;
+            default:
+                return data?.message || data?.Message || `Error: ${status}`;
+        }
     }
 
     async fetchAllUsers(): Promise<User[]> {
