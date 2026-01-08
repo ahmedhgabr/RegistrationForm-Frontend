@@ -38,9 +38,8 @@ class UserService {
 
         // Handle errors
         let errorData = null;
-        if (hasJson) {
-            errorData = await response.json().catch(() => null);
-        }
+        errorData = await response.json().catch(() => null);
+
 
         const errorMessage = this.mapErrorMessage(response.status, errorData);
 
@@ -58,11 +57,11 @@ class UserService {
                     const errorMessages = Object.entries(data.errors)
                         .map(([field, msgs]) => `${field}: ${(msgs as string[]).join(', ')}`)
                         .join('\n');
-                    return `Validation errors:\n${errorMessages}`;
+                    return `Please check the following errors:\n${errorMessages}`;
                 }
-                return `Validation error: ${JSON.stringify(data)}  ${data?.message || 'Invalid request'}`;
+                return `Validation error: ${data?.message || data?.title || JSON.stringify(data)}`;
             case 404:
-                return  data?.message || 'User not found.';
+                return data?.message || 'User not found.';
             case 409:
                 return data?.message || 'This record already exists.';
             case 500:
